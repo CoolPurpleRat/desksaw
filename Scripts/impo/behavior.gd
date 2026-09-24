@@ -60,6 +60,8 @@ var isSleeping := false
 var isHungry := false
 var isSad := false
 var shocked := false
+##When set, the expie looks toward and walks toward this node instead of the mouse.
+var attention: Node2D = null
 
 
 #unused atm
@@ -175,7 +177,7 @@ func checker():
 		if not shocked and not isSleeping:
 			#sleep stuff
 			currentEmotion = emotionz.normal
-			if sleepN > 80.0:
+			if sleepN > 80.0 and not $yapHandler.isInteracting():
 				var sleepflag1 = false
 
 				if !isTired:
@@ -218,7 +220,7 @@ func checker():
 				currentEmotion = emotionz.happy
 
 				#ungry
-			if hungerHandler.hungry < 30.0:
+			if hungerHandler.hungry < 30.0 and not $yapHandler.isInteracting():
 				if !isHungry:
 					dialogueSys.pool = dialogueSys.data.hungry
 					dialogueSys.send()
@@ -231,6 +233,7 @@ func checker():
 
 			#update
 			faceSys.setEmotion(emotionz.keys()[currentEmotion])
+		statUpd.stat.friendliness = $yapHandler.friendliness
 		statUpd.stat.id = ("#" + GlobalVariable.getNumFromString(petId))
 		statUpd.stat.mood = moodN
 		statUpd.stat.hunger = hungerHandler.hungry
@@ -330,7 +333,7 @@ func passivetalk() -> void:
 			print(diaTimerMinimum, "max")
 			print(diaTimerMaximum, "min")
 			await get_tree().create_timer(randf_range(float(diaTimerMinimum), float(diaTimerMaximum))).timeout
-			if not beingDragged and not isSleeping and not shocked:
+			if not beingDragged and not isSleeping and not shocked and not $yapHandler.isInteracting():
 				dialogueSys.pool = dialogueSys.data.Passive
 				match currentEmotion:
 					emotionz.normal:
