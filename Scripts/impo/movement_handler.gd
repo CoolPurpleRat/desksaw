@@ -176,16 +176,16 @@ func initswithc(state: states):
 			const hbLaydown=3  ##Hitbox id laying down
 			#dancing
 			if currentEmotion==expieBehaviour.emotionz.happy and randi_range(0,2)==2:
-				var animations:Array[StringName]=[&"dance", &"DanceFG", &"DanceLC"]
+				var animations:Array[StringName]=[&"IHappy/dance", &"IHappy/SurfinBird", &"IHappy/LethalCompanyDance"]
 				var randAnimation:StringName=animations.pick_random()
 				animplay.play(randAnimation)
 			#training
 			elif (currentEmotion==expieBehaviour.emotionz.normal \
 			or currentEmotion==expieBehaviour.emotionz.happy) and randi_range(0,2)==2:
-				var animations:Array[StringName]=[&"TrainPlank", &"TrainPushUp", &"TrainSquats"]
+				var animations:Array[StringName]=[&"Idle/Plank", &"Idle/PushUps", &"Idle/Squats"]
 				var randAnimation:StringName=animations.pick_random()
 				animplay.play(randAnimation)
-				if randAnimation==&"TrainPlank" or randAnimation==&"TrainPushUp":
+				if randAnimation==&"Idle/Plank" or randAnimation==&"Idle/PushUps":
 					switch_hitbox(hbLaydown)
 			#laydown or sit
 			else:
