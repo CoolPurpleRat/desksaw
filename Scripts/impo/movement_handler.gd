@@ -177,7 +177,7 @@ func initswithc(state: states):
 			#dancing
 			if currentEmotion==expieBehaviour.emotionz.happy and randi_range(0,2)==2:
 				var animations:Array[StringName]=[&"dance", &"SurfinBird", 
-				&"LethalCompanyDance",  &"BeatBox", &"BackFlips"]
+				&"LethalCompanyDance",  &"BeatBox", &"BackFlips", &"HandSwing", &"67"]
 				const lib=&"IdleHappy/"
 				var randAnimation:StringName=animations.pick_random()
 				animplay.play(lib+randAnimation)
