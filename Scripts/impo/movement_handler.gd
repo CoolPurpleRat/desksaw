@@ -55,7 +55,7 @@ enum states {
 }
 var currstate = states.idle
 ##Current emotion, used to determine if expie can dance or train.
-var currentEmotion:int=expieBehaviour.emotionz.normal
+var currentEmotion:=expieBehaviour.emotionz.normal
 
 func _ready() -> void:
 	animplay.play("idleagain")
@@ -174,29 +174,29 @@ func initswithc(state: states):
 			
 			const hbSit=2 ##Hitbox id sitting
 			const hbLaydown=3  ##Hitbox id laying down
-			#dancing
+			
+			var randAnimation:StringName="" ##Random idle animation
+			var animationList:Array[StringName] ##Possible idle animations
+			var lib:StringName="" ##Prefix of library. e.g. Idle/
+		
 			if currentEmotion==expieBehaviour.emotionz.happy and randi_range(0,2)==2:
-				var animations:Array[StringName]=[&"dance", &"SurfinBird", 
-				&"LethalCompanyDance",  &"BeatBox", &"BackFlips", &"HandSwing", &"67"]
-				const lib=&"IdleHappy/"
-				var randAnimation:StringName=animations.pick_random()
-				animplay.play(lib+randAnimation)
-			#training
+				lib=&"IdleHappy/"
+				animationList=[&"dance", &"SurfinBird", 
+				&"LethalCompanyDance",  &"BeatBox", &"BackFlips", &"HandSwing", &"67"]	
 			elif (currentEmotion==expieBehaviour.emotionz.normal \
 			or currentEmotion==expieBehaviour.emotionz.happy) and randi_range(0,2)==2:
-				var animations:Array[StringName]=[&"Plank", &"PushUps", &"Squats", &"SitOnKnees"]
-				const lib=&"Idle/"
-				var randAnimation:StringName=animations.pick_random()
-				animplay.play(lib+randAnimation)
-				if randAnimation==&"Plank" or randAnimation==&"PushUps":
-					switch_hitbox(hbLaydown)
-				if randAnimation==&"SitOnKnees":
-					switch_hitbox(hbSit)
-			#laydown or sit
+				lib=&"Idle/"
+				animationList=[&"Plank", &"PushUps", &"Squats", &"SitOnKnees"]
 			else:
-				var r = randi_range(1, 2)
-				animplay.play("sit" if r == 1 else "laydown")
-				switch_hitbox(hbSit if r == 1 else hbLaydown)
+				animationList=[&"sit", &"laydown"]
+
+			randAnimation=animationList.pick_random()
+			animplay.play(lib+randAnimation)
+			
+			const sitAnimations=[&"sit", &"SitOnKnees"]
+			const laydownAnims=[&"laydown", &"Plank", &"PushUps",]
+			if randAnimation in sitAnimations: switch_hitbox(hbSit)
+			elif randAnimation in laydownAnims: switch_hitbox(hbLaydown)
 			
 			await get_tree().create_timer(resttime).timeout
 			initswithc(states.idle)
