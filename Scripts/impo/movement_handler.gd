@@ -170,23 +170,28 @@ func initswithc(state: states):
 		states.resting:
 			print("resting")
 			self.get_parent().wander = false
-			var resttime = randi_range(120, 200)
+			var resttime := randi_range(120, 200) ##How long is animation
 			
 			const hbSit=2 ##Hitbox id sitting
 			const hbLaydown=3  ##Hitbox id laying down
 			#dancing
 			if currentEmotion==expieBehaviour.emotionz.happy and randi_range(0,2)==2:
-				var animations:Array[StringName]=[&"IHappy/dance", &"IHappy/SurfinBird", &"IHappy/LethalCompanyDance"]
+				var animations:Array[StringName]=[&"dance", &"SurfinBird", 
+				&"LethalCompanyDance",  &"BeatBox", &"BackFlips"]
+				const lib=&"IdleHappy/"
 				var randAnimation:StringName=animations.pick_random()
-				animplay.play(randAnimation)
+				animplay.play(lib+randAnimation)
 			#training
 			elif (currentEmotion==expieBehaviour.emotionz.normal \
 			or currentEmotion==expieBehaviour.emotionz.happy) and randi_range(0,2)==2:
-				var animations:Array[StringName]=[&"Idle/Plank", &"Idle/PushUps", &"Idle/Squats"]
+				var animations:Array[StringName]=[&"Plank", &"PushUps", &"Squats", &"SitOnKnees"]
+				const lib=&"Idle/"
 				var randAnimation:StringName=animations.pick_random()
-				animplay.play(randAnimation)
-				if randAnimation==&"Idle/Plank" or randAnimation==&"Idle/PushUps":
+				animplay.play(lib+randAnimation)
+				if randAnimation==&"Plank" or randAnimation==&"PushUps":
 					switch_hitbox(hbLaydown)
+				if randAnimation==&"SitOnKnees":
+					switch_hitbox(hbSit)
 			#laydown or sit
 			else:
 				var r = randi_range(1, 2)
