@@ -61,15 +61,15 @@ var currentEmotion:=expieBehaviour.emotionz.normal
 #Libraries names are separated, so names are shorter
 const libHappy=&"IdleHappy/"
 const animListHappy:Array[StringName]=[&"dance", &"SurfinBird", 
-		&"LethalCompanyDance",  &"BeatBox", &"BackFlips", &"HandSwing", &"67"]
+		&"LethalCompanyDance",  &"BeatBox", &"BackFlips", &"HandSwing", &"67", &"PinguinClubDance"]
 		
 const libNotTired=&"Idle/"
 const animListNotTired:Array[StringName]=[&"Plank", &"PushUps", &"Squats", &"SitOnKnees"]
 
 const animListNormal:Array[StringName]=[&"sit", &"laydown"]
 
-const sitAnimations=[&"sit", &"Idle/SitOnKnees"]
-const laydownAnims=[&"laydown", &"Idle/Plank", &"Idle/PushUps"]
+const sitAnimations:Array[StringName]=[&"sit", &"Idle/SitOnKnees"]
+const laydownAnims:Array[StringName]=[&"laydown", &"Idle/Plank", &"Idle/PushUps"]
 ##Is animations checked. Prevents another checks, so its not tanks fps.
 static var isCheckedAnims:=false
 #endregion
@@ -352,19 +352,20 @@ func ragdoll(val: bool):
 		rigid.global_position.x = rigidtorso.global_position.x
 		rigid.global_position.y = rigidtorso.global_position.y
 
-##Make check that all animations in animation lists exists.
+##Make check that all animations in animation lists exists. If something dont -- throw error
 func checkAnimationLists()->void:
 	isCheckedAnims=true
+	var realAnimList:=animplay.get_animation_list()
 	for anim in animListHappy:
-		assert((libHappy+anim) in animplay.get_animation_list(), "sawianBase:Couldn't find animation with name:"+libHappy+anim)
+		assert((libHappy+anim) in realAnimList, "sawianBase:Couldn't find animation with name:"+libHappy+anim)
 	for anim in animListNotTired:
-		assert((libNotTired+anim) in animplay.get_animation_list(), "sawianBase:Couldn't find animation with name:"+libNotTired+anim)
+		assert((libNotTired+anim) in realAnimList, "sawianBase:Couldn't find animation with name:"+libNotTired+anim)
 	for anim in animListNormal:
-		assert(anim in animplay.get_animation_list(), "sawianBase:Couldn't find animation with name:"+anim)
+		assert(anim in realAnimList, "sawianBase:Couldn't find animation with name:"+anim)
 	for anim in sitAnimations:
-		assert(anim in animplay.get_animation_list(), "sawianBase:Couldn't find animation with name:"+anim)
+		assert(anim in realAnimList, "sawianBase:Couldn't find animation with name:"+anim)
 	for anim in laydownAnims:
-		assert(anim in animplay.get_animation_list(), "sawianBase:Couldn't find animation with name:"+anim)
+		assert(anim in realAnimList, "sawianBase:Couldn't find animation with name:"+anim)
 
 ##Plays one of random idle animations
 func playRandomIdleAnim()->void:
@@ -373,7 +374,7 @@ func playRandomIdleAnim()->void:
 	
 	var randAnimation:StringName="" ##Random idle animation
 	var animationList:Array[StringName] ##Choosen library
-		
+	
 	if currentEmotion==expieBehaviour.emotionz.happy and randi_range(0,2)==2:
 		randAnimation=libHappy
 		animationList=animListHappy
