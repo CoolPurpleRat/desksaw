@@ -191,6 +191,7 @@ func initswithc(state: states):
 		states.resting:
 			print("resting")
 			self.get_parent().wander = false
+			animplay.speed_scale = 1
 			var resttime := randi_range(120, 200) ##How long is animation
 			playRandomIdleAnim()
 			
