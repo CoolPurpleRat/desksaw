@@ -61,10 +61,12 @@ var currentEmotion:=expieBehaviour.emotionz.normal
 #Libraries names are separated, so names are shorter
 const libHappy=&"IdleHappy/"
 const animListHappy:Array[StringName]=[&"dance", &"SurfinBird", 
-		&"LethalCompanyDance",  &"BeatBox", &"BackFlips", &"HandSwing", &"67", &"PinguinClubDance"]
+		&"LethalCompanyDance",  &"BeatBox", &"BackFlips", &"HandSwing", &"67", &"PinguinClubDance",
+		&"Caramelldansen"]
 		
 const libNotTired=&"Idle/"
-const animListNotTired:Array[StringName]=[&"Plank", &"PushUps", &"Squats", &"SitOnKnees"]
+const animListNotTired:Array[StringName]=[&"Plank", &"PushUps", 
+&"Squats", &"SitOnKnees", &"ShadowBoxing", &"YogaTree"]
 
 const animListNormal:Array[StringName]=[&"sit", &"laydown"]
 
