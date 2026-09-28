@@ -54,10 +54,10 @@ func spawnExpie(petId: String = ""):
 	
 	#Update scale based on saved info or spawn setting
 	if gbData.data["saw"][petId].has("spawnSize"):
-		wrapper.scale*=gbData.data["saw"][petId]["spawnSize"]
+		wrapper.scale *= gbData.data["saw"][petId]["spawnSize"]
 	else:
 		if gbData.settings.has("spawnSize"):
-			wrapper.scale*=gbData.settings["spawnSize"]
+			wrapper.scale *= gbData.settings["spawnSize"]
 		
 	get_tree().current_scene.add_child(wrapper)
 	wrapper.owner = get_tree().current_scene
@@ -173,6 +173,7 @@ func _ready():
 	#Console.create_command("expieID", toggleExpieDebugIDs, "toggles debug IDs for expies")
 	#Console.create_command("deathLoop", deathLoop, "please dont crash")
 
+
 func _do_i_cmds():
 	if has_run_commands:
 		return
@@ -182,3 +183,44 @@ func _do_i_cmds():
 	Console.execute("setMonitor {0}".format([int(gbData.settings.get("defaultMonitor", 0))]))
 	Console.execute("help")
 	Console.print(tr("CONSOLE_DISCLAIMER_MESSAGE"))
+
+
+"""	
+	# if any of these flags are true, cancel function
+var x = false
+var y = false
+var z = false
+func checkthingbad();
+
+	#this is fine but its hard to read
+
+    if x:
+        if y:
+            if z:
+                return
+                print("z is true, cancel function")
+		else:
+			return
+			print("y is true, cancel function")
+	else:
+		return
+		print("x is true, cancel function")
+
+	# do thing here
+
+func checkthing();
+
+	## i like this better
+
+	if (x):
+		print("x is true, cancel function")
+		return
+	if (y):
+		print("y is true, cancel function")
+		return
+	if (z):
+		print("z is true, cancel function")
+		return
+
+		## logic here
+"""
