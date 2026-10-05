@@ -59,28 +59,28 @@ var currentEmotion:=expieBehaviour.emotionz.normal
 
 #region Animations libraries
 #Libraries names are separated, so names are shorter
-const libHappy=&"IdleHappy/"
-const animListHappy:Array[StringName]=[&"dance", &"SurfinBird", 
+const _libHappy=&"IdleHappy/"
+const _animListHappy:Array[StringName]=[&"dance", &"SurfinBird", 
 		&"LethalCompanyDance",  &"BeatBox", &"BackFlips", &"HandSwing", &"67", &"PinguinClubDance",
 		&"Caramelldansen"]
 		
-const libNotTired=&"Idle/"
-const animListNotTired:Array[StringName]=[&"Plank", &"PushUps", 
+const _libNotTired=&"Idle/"
+const _animListNotTired:Array[StringName]=[&"Plank", &"PushUps", 
 &"Squats", &"SitOnKnees", &"ShadowBoxing", &"YogaTree"]
 
-const animListNormal:Array[StringName]=[&"sit", &"laydown"]
+const _animListNormal:Array[StringName]=[&"sit", &"laydown"]
 
-const sitAnimations:Array[StringName]=[&"sit", &"Idle/SitOnKnees"]
-const laydownAnims:Array[StringName]=[&"laydown", &"Idle/Plank", &"Idle/PushUps"]
+const _sitAnimations:Array[StringName]=[&"sit", &"Idle/SitOnKnees"]
+const _laydownAnims:Array[StringName]=[&"laydown", &"Idle/Plank", &"Idle/PushUps"]
 ##Is animations checked. Prevents another checks, so its not tanks fps.
-static var isCheckedAnims:=false
+static var _isCheckedAnims:=false
 #endregion
 
 func _ready() -> void:
 	animplay.play("idleagain")
 
-	if not OS.has_feature("release") and not isCheckedAnims:	
-		checkAnimationLists()
+	if not OS.has_feature("release") and not _isCheckedAnims:	
+		_checkAnimationLists()
 	#invertPoints(false, true)
 	pass
 func _physics_process(delta: float) -> void:
@@ -193,7 +193,7 @@ func initswithc(state: states):
 			self.get_parent().wander = false
 			animplay.speed_scale = 1
 			var resttime := randi_range(120, 200) ##How long is animation
-			playRandomIdleAnim()
+			_playRandomIdleAnim()
 			
 			await get_tree().create_timer(resttime).timeout
 			initswithc(states.idle)
@@ -356,40 +356,37 @@ func ragdoll(val: bool):
 		rigid.global_position.y = rigidtorso.global_position.y
 
 ##Make check that all animations in animation lists exists. If something dont -- throw error
-func checkAnimationLists()->void:
-	isCheckedAnims=true
+func _checkAnimationLists()->void:
+	_isCheckedAnims=true
 	var realAnimList:=animplay.get_animation_list()
-	for anim in animListHappy:
-		assert((libHappy+anim) in realAnimList, "sawianBase:Couldn't find animation with name:"+libHappy+anim)
-	for anim in animListNotTired:
-		assert((libNotTired+anim) in realAnimList, "sawianBase:Couldn't find animation with name:"+libNotTired+anim)
-	for anim in animListNormal:
+	for anim in _animListHappy:
+		assert((_libHappy+anim) in realAnimList, "sawianBase:Couldn't find animation with name:"+_libHappy+anim)
+	for anim in _animListNotTired:
+		assert((_libNotTired+anim) in realAnimList, "sawianBase:Couldn't find animation with name:"+_libNotTired+anim)
+	for anim in _animListNormal:
 		assert(anim in realAnimList, "sawianBase:Couldn't find animation with name:"+anim)
-	for anim in sitAnimations:
+	for anim in _sitAnimations:
 		assert(anim in realAnimList, "sawianBase:Couldn't find animation with name:"+anim)
-	for anim in laydownAnims:
+	for anim in _laydownAnims:
 		assert(anim in realAnimList, "sawianBase:Couldn't find animation with name:"+anim)
 
 ##Plays one of random idle animations
-func playRandomIdleAnim()->void:
+func _playRandomIdleAnim()->void:
 	const hbSit=2 ##Hitbox id sitting
 	const hbLaydown=3  ##Hitbox id laying down
 	
 	var randAnimation:StringName="" ##Random idle animation
-	var animationList:Array[StringName] ##Choosen library
 	
 	if currentEmotion==expieBehaviour.emotionz.happy and randi_range(0,2)==2:
-		randAnimation=libHappy
-		animationList=animListHappy
+		randAnimation=_libHappy
+		randAnimation+=_animListHappy.pick_random()
 	elif (currentEmotion==expieBehaviour.emotionz.normal \
 	or currentEmotion==expieBehaviour.emotionz.happy) and randi_range(0,2)==2:
-		randAnimation=libNotTired
-		animationList=animListNotTired
+		randAnimation=_libNotTired
+		randAnimation+=_animListNotTired.pick_random()
 	else:
-		animationList=animListNormal
-	
-	randAnimation+=animationList.pick_random()
+		randAnimation=_animListNormal.pick_random()	
 	animplay.play(randAnimation)
 	
-	if (randAnimation) in sitAnimations: switch_hitbox(hbSit)
-	elif (randAnimation) in laydownAnims: switch_hitbox(hbLaydown)
+	if (randAnimation) in _sitAnimations: switch_hitbox(hbSit)
+	elif (randAnimation) in _laydownAnims: switch_hitbox(hbLaydown)
